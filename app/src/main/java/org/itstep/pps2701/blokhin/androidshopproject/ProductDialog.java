@@ -37,9 +37,9 @@ public class ProductDialog extends AppCompatActivity implements View.OnClickList
         switch(v.getId()){
             case R.id.btnOk:
                 try {
-                    if(edProdName.getText().toString() == "") throw new IllegalArgumentException("Заполните все поля!");
-                    if(edProdDesc.getText().toString() == "") throw new IllegalArgumentException("Заполните все поля!");
-                    if(edProdPrice.getText().toString() == "") throw new IllegalArgumentException("Заполните все поля!");
+                    if(edProdName.getText().length() == 0) throw new IllegalArgumentException("Заполните все поля!");
+                    if(edProdDesc.getText().length() == 0) throw new IllegalArgumentException("Заполните все поля!");
+                    if(edProdPrice.getText().length() == 0) throw new IllegalArgumentException("Заполните все поля!");
                     Product prod = new Product(
                             edProdName.getText().toString(),
                             edProdDesc.getText().toString(),
