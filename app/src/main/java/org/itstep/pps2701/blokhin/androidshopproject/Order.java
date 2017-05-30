@@ -1,11 +1,14 @@
 package org.itstep.pps2701.blokhin.androidshopproject;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by Vit on 30.05.2017.
  */
-public class Order {
+public class Order  implements Parcelable {
     private int id;
     private int number;
     private Date date;
@@ -38,5 +41,15 @@ public class Order {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 } // class Order

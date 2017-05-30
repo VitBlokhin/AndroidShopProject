@@ -1,5 +1,6 @@
 package org.itstep.pps2701.blokhin.androidshopproject;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,7 +16,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnClickListener {
+public class MainActivity extends AppCompatActivity implements OnClickListener, ISelectedProduct {
+    private final int REQUEST_PRODUCT = 1;
+    private final int REQUEST_PRODUCT_EDIT = 2;
+
     SQLiteDatabase db;
     DBHelper helper;
     Cursor userCursor;
@@ -36,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         btnEditProduct = (Button) findViewById(R.id.btnEditProduct);
         productListView = (ListView) findViewById(R.id.listProduct);
 
+        btnAddProduct.setOnClickListener(this);
+        btnEditProduct.setOnClickListener(this);
+
         helper = new DBHelper(this);
         fillProductList();
     }
@@ -47,11 +54,31 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         switch (v.getId()) {
 
             case R.id.btnAddProduct:
+                intent = new Intent(this, ProductDialog.class);
+                startActivityForResult(intent, REQUEST_PRODUCT);
                 break;
             case R.id.btnEditProduct:
+                Toast.makeText(this, "Функционал еще не добавлен", Toast.LENGTH_SHORT).show();
                 break;
         } // switch
     } // onClick
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_PRODUCT:
+                    Product product = data.getParcelableExtra("product");
+                    addProduct(product);
+                    break;
+                case REQUEST_PRODUCT_EDIT:
+                    break;
+            }
+            // если вернулось не ОК
+        } else {
+            Toast.makeText(this, "Wrong result", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void fillProductList(){
         db = helper.getReadableDatabase();
@@ -79,8 +106,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void addProduct(Product prod){
-
-    }
+        ContentValues cv = new ContentValues();
+        cv.put("name", prod.getName());
+        cv.put("description", prod.getDescription());
+        cv.put("price", prod.getPrice());
+        db.insert("Goods", null, cv);
+        fillProductList();
+        Toast.makeText(this, "Новый товар добавлен", Toast.LENGTH_SHORT).show();
+    } // addProduct
 
     @Override
     public void onResume() {
@@ -88,4 +121,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         fillProductList();
     }
 
+    @Override
+    public void onSelectedData(Product product) {
+
+    }
 }
