@@ -16,7 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnClickListener, ISelectedProduct {
+public class MainActivity extends AppCompatActivity implements OnClickListener {
     private final int REQUEST_PRODUCT = 1;
     private final int REQUEST_PRODUCT_EDIT = 2;
 
@@ -121,8 +121,4 @@ public class MainActivity extends AppCompatActivity implements OnClickListener, 
         fillProductList();
     }
 
-    @Override
-    public void onSelectedData(Product product) {
-
-    }
 }
