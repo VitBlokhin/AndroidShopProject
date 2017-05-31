@@ -74,7 +74,7 @@ public class Product  implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
         dest.writeDouble(price);
-    }
+    } // writeToParcel
 
     public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
         // распаковываем объект из Parcel

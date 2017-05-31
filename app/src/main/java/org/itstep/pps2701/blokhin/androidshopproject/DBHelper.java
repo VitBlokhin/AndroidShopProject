@@ -60,6 +60,6 @@ public class DBHelper  extends SQLiteOpenHelper {
     // таблиц, удаление таблиц
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-    }
+    } // onUpgrade
 
 } // class DBHelper

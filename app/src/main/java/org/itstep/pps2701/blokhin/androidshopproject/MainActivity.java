@@ -8,10 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.*;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +20,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     SQLiteDatabase db;
     DBHelper helper;
     Cursor userCursor;
-    long prodId = 0;
+
+    Intent intent;
 
     Button btnAddProduct;
-    Button btnEditProduct;
     ListView productListView;
 
     private static final String LOG_TAG = "SQLiteShop";
@@ -37,28 +34,32 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         setContentView(R.layout.activity_main);
 
         btnAddProduct = (Button) findViewById(R.id.btnAddProduct);
-        btnEditProduct = (Button) findViewById(R.id.btnEditProduct);
         productListView = (ListView) findViewById(R.id.listProduct);
 
         btnAddProduct.setOnClickListener(this);
-        btnEditProduct.setOnClickListener(this);
+
+        productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                intent = new Intent(getApplicationContext(), ProductDialog.class);
+
+                intent.putExtra("product", getProductById((int)id+1));
+                startActivityForResult(intent, REQUEST_PRODUCT_EDIT);
+            }
+        });
 
         helper = new DBHelper(this);
         fillProductList();
-    }
+    } // onCreate
 
 
     @Override
     public void onClick(View v) {
-        Intent intent;
         switch (v.getId()) {
-
             case R.id.btnAddProduct:
                 intent = new Intent(this, ProductDialog.class);
+                intent.putExtra("request", REQUEST_PRODUCT);
                 startActivityForResult(intent, REQUEST_PRODUCT);
-                break;
-            case R.id.btnEditProduct:
-                Toast.makeText(this, "Функционал еще не добавлен", Toast.LENGTH_SHORT).show();
                 break;
         } // switch
     } // onClick
@@ -66,19 +67,19 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
+            Product product;
             switch (requestCode) {
                 case REQUEST_PRODUCT:
-                    Product product = data.getParcelableExtra("product");
+                    product = data.getParcelableExtra("product");
                     addProduct(product);
                     break;
                 case REQUEST_PRODUCT_EDIT:
+                    product = data.getParcelableExtra("product");
+                    editProduct(product);
                     break;
-            }
-            // если вернулось не ОК
-        } else {
-            Toast.makeText(this, "Wrong result", Toast.LENGTH_SHORT).show();
-        }
-    }
+            } // switch
+        } // if
+    } // onActivityResult
 
     private void fillProductList(){
         db = helper.getReadableDatabase();
@@ -103,7 +104,22 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         } else {
             Toast.makeText(this, "Строк в таблице: 0",Toast.LENGTH_LONG).show();
         } // if
-    }
+    } // fillProductList
+
+    private Product getProductById(int id){
+        userCursor = db.rawQuery("select * from Goods where " +
+                "_id =?", new String[]{String.valueOf(id)});
+        userCursor.moveToFirst();
+        int idIndex = userCursor.getColumnIndex("_id");
+        int nameIndex = userCursor.getColumnIndex("name");
+        int descIndex = userCursor.getColumnIndex("description");
+        int priceIndex = userCursor.getColumnIndex("price");
+
+        return new Product(userCursor.getInt(idIndex),
+                userCursor.getString(nameIndex),
+                userCursor.getString(descIndex),
+                userCursor.getDouble(priceIndex));
+    } // getProductById
 
     private void addProduct(Product prod){
         ContentValues cv = new ContentValues();
@@ -115,10 +131,20 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         Toast.makeText(this, "Новый товар добавлен", Toast.LENGTH_SHORT).show();
     } // addProduct
 
+    private void editProduct(Product prod){
+        ContentValues cv = new ContentValues();
+        cv.put("name", prod.getName());
+        cv.put("description", prod.getDescription());
+        cv.put("price", prod.getPrice());
+        db.update("Goods", cv, "_id" + "=" + String.valueOf(prod.getId()), null);
+        fillProductList();
+        Toast.makeText(this, "Товар изменён", Toast.LENGTH_SHORT).show();
+    } // addProduct
+
     @Override
     public void onResume() {
         super.onResume();
         fillProductList();
-    }
+    } // onResume
 
-}
+} // class MainActivity

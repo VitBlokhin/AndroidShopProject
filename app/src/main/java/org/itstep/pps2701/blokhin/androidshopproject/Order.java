@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by Vit on 30.05.2017.
  */
-public class Order  implements Parcelable {
+public class Order implements Parcelable {
     private int id;
     private int number;
     private Date date;
@@ -18,6 +18,24 @@ public class Order  implements Parcelable {
         this.number = number;
         this.date = date;
     }
+
+    protected Order(Parcel in) {
+        id = in.readInt();
+        number = in.readInt();
+        date = new Date(in.readLong());
+    }
+
+    public static final Creator<Order> CREATOR = new Creator<Order>() {
+        @Override
+        public Order createFromParcel(Parcel in) {
+            return new Order(in);
+        }
+
+        @Override
+        public Order[] newArray(int size) {
+            return new Order[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -50,6 +68,13 @@ public class Order  implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(number);
+        dest.writeLong(date.getTime());
+    } // writeToParcel
 
+    @Override
+    public String toString() {
+        return "Заказ №" + number + ", от " + date;
     }
 } // class Order

@@ -9,6 +9,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class ProductDialog extends AppCompatActivity implements View.OnClickListener {
+    private final int REQUEST_PRODUCT = 1;
+    private final int REQUEST_PRODUCT_EDIT = 2;
+
+    private Product prod;
+    private int prodId = -1;
+
     EditText edProdName;
     EditText edProdDesc;
     EditText edProdPrice;
@@ -24,12 +30,22 @@ public class ProductDialog extends AppCompatActivity implements View.OnClickList
         edProdDesc = (EditText)findViewById(R.id.editProdDesc);
         edProdPrice = (EditText)findViewById(R.id.editProdPrice);
 
+        Intent intent = getIntent();
+        if(intent.hasExtra("product")) {
+            prod = intent.getParcelableExtra("product");
+            prodId = prod.getId();
+            edProdName.setText(prod.getName());
+            edProdDesc.setText(prod.getDescription());
+            edProdPrice.setText(String.valueOf(prod.getPrice()));
+        }
+
+
         btnOk = (Button)findViewById(R.id.btnOk);
         btnCancel = (Button)findViewById(R.id.btnCancel);
 
         btnOk.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
-    }
+    } // onCreate
 
     @Override
     public void onClick(View v) {
@@ -40,7 +56,7 @@ public class ProductDialog extends AppCompatActivity implements View.OnClickList
                     if(edProdName.getText().length() == 0) throw new IllegalArgumentException("Заполните все поля!");
                     if(edProdDesc.getText().length() == 0) throw new IllegalArgumentException("Заполните все поля!");
                     if(edProdPrice.getText().length() == 0) throw new IllegalArgumentException("Заполните все поля!");
-                    Product prod = new Product(
+                    prod = new Product(prodId,
                             edProdName.getText().toString(),
                             edProdDesc.getText().toString(),
                             Double.parseDouble(edProdPrice.getText().toString()));

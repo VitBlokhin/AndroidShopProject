@@ -5,8 +5,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="strBtnAddProduct">Добавить товар</string>
     <string name="strBtnEditProduct">Изменить товар</string>
-    <string name="strBtnOk">Ok</string>
-    <string name="strBtnCancel">Cancel</string>
+    <string name="strBtnOk">Ок</string>
+    <string name="strBtnCancel">Отмена</string>
+    <string name="strBtnSave">Сохранить</string>
     <string name="strTxtProdName">Название товара</string>
     <string name="strTxtProdDescr">Описание товара</string>
     <string name="strTxtProdPrice">Цена товара</string>
