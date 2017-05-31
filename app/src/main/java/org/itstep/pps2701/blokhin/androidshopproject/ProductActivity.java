@@ -39,9 +39,10 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
             productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Product prod = (Product)productListView.getItemAtPosition(position);
                     intent = new Intent(getApplicationContext(), ProductDialog.class);
-
-                    intent.putExtra("product", dbManager.getProductById((int) id + 1));  // может возникнуть проблема,
+                    intent.putExtra("product", dbManager.getProductById(prod.getId()));
+                    //intent.putExtra("product", dbManager.getProductById((int) id + 1));  // может возникнуть проблема,
                     startActivityForResult(intent, REQUEST_PRODUCT_EDIT);                      // т.к. id из ListView - не то же самое, что id товара из БД
                 }
             });

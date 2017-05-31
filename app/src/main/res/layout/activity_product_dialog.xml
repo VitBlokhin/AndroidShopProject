@@ -4,7 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="ProductDialog"
+              android:id="@+id/activity_product_dialog"
+              tools:context="org.itstep.pps2701.blokhin.androidshopproject.ProductDialog"
               android:weightSum="1">
 
 

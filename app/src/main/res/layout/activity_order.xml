@@ -2,11 +2,11 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_product"
+        android:id="@+id/activity_order"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        tools:context="org.itstep.pps2701.blokhin.androidshopproject.ProductActivity">
+        tools:context="org.itstep.pps2701.blokhin.androidshopproject.OrderActivity">
 
     <LinearLayout
             android:orientation="vertical"
@@ -17,7 +17,7 @@
         <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/listProduct"/>
+                android:id="@+id/listOrder"/>
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
@@ -25,11 +25,11 @@
             android:layout_height="wrap_content">
 
         <Button
-                android:text="@string/strBtnAddProduct"
+                android:text="@string/strBtnAddOrder"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/btnAddProduct"/>
+                android:id="@+id/btnAddOrder"/>
         <Button
                 android:text="@string/strBtnBack"
                 android:layout_width="0dp"
@@ -37,4 +37,5 @@
                 android:layout_weight="1"
                 android:id="@+id/btnBack"/>
     </LinearLayout>
+
 </LinearLayout>

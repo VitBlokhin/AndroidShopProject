@@ -19,6 +19,10 @@
         </activity>
         <activity android:name=".ProductActivity">
         </activity>
+        <activity android:name=".OrderActivity">
+        </activity>
+        <activity android:name=".OrderDialog">
+        </activity>
     </application>
 
 </manifest>

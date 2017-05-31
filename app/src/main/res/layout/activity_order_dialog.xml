@@ -2,11 +2,11 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_product"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="org.itstep.pps2701.blokhin.androidshopproject.ProductActivity">
+        android:id="@+id/activity_order_dialog"
+        tools:context="org.itstep.pps2701.blokhin.androidshopproject.OrderDialog">
 
     <LinearLayout
             android:orientation="vertical"
@@ -19,22 +19,23 @@
                 android:layout_height="match_parent"
                 android:id="@+id/listProduct"/>
     </LinearLayout>
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
         <Button
-                android:text="@string/strBtnAddProduct"
+                android:text="@string/strBtnSave"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/btnAddProduct"/>
+                android:id="@+id/btnOk"/>
         <Button
-                android:text="@string/strBtnBack"
+                android:text="@string/strBtnCancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/btnBack"/>
+                android:id="@+id/btnCancel"/>
     </LinearLayout>
+
 </LinearLayout>

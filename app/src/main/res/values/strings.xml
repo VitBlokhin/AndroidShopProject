@@ -11,7 +11,8 @@
     <string name="strTxtProdName">Название товара</string>
     <string name="strTxtProdDescr">Описание товара</string>
     <string name="strTxtProdPrice">Цена товара</string>
-    <string name="txtBtnOpenProducts">Список товаров</string>
+    <string name="strBtnOpenProducts">Список товаров</string>
     <string name="strBtnBack">Назад</string>
     <string name="strBtnExit">Выход</string>
+    <string name="strBtnAddOrder">Создать заказ</string>
 </resources>
