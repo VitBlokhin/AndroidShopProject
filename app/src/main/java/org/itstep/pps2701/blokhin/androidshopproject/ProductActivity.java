@@ -5,8 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Product;
+import org.itstep.pps2701.blokhin.androidshopproject.dbutils.DBManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductActivity extends AppCompatActivity implements View.OnClickListener {

@@ -1,4 +1,4 @@
-package org.itstep.pps2701.blokhin.androidshopproject;
+package org.itstep.pps2701.blokhin.androidshopproject.dataclasses;
 
 
 import android.os.Parcel;

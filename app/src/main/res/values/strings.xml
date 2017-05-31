@@ -13,4 +13,5 @@
     <string name="strTxtProdPrice">Цена товара</string>
     <string name="txtBtnOpenProducts">Список товаров</string>
     <string name="strBtnBack">Назад</string>
+    <string name="strBtnExit">Выход</string>
 </resources>

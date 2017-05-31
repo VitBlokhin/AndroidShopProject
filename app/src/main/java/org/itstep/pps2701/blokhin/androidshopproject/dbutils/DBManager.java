@@ -1,11 +1,11 @@
-package org.itstep.pps2701.blokhin.androidshopproject;
+package org.itstep.pps2701.blokhin.androidshopproject.dbutils;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.*;
 
-import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

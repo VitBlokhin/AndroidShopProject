@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Product;
 
 public class ProductDialog extends AppCompatActivity implements View.OnClickListener {
 

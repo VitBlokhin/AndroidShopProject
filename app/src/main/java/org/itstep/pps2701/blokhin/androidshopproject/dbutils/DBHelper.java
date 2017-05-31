@@ -1,10 +1,9 @@
-package org.itstep.pps2701.blokhin.androidshopproject;
+package org.itstep.pps2701.blokhin.androidshopproject.dbutils;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  * Created by Vit on 30.05.2017.
