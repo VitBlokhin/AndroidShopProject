@@ -9,8 +9,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class ProductDialog extends AppCompatActivity implements View.OnClickListener {
-    private final int REQUEST_PRODUCT = 1;
-    private final int REQUEST_PRODUCT_EDIT = 2;
 
     private Product prod;
     private int prodId = -1;
@@ -38,7 +36,6 @@ public class ProductDialog extends AppCompatActivity implements View.OnClickList
             edProdDesc.setText(prod.getDescription());
             edProdPrice.setText(String.valueOf(prod.getPrice()));
         }
-
 
         btnOk = (Button)findViewById(R.id.btnOk);
         btnCancel = (Button)findViewById(R.id.btnCancel);

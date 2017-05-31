@@ -104,9 +104,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         } else {
             Toast.makeText(this, "Строк в таблице: 0",Toast.LENGTH_LONG).show();
         } // if
+        helper.close();
     } // fillProductList
 
     private Product getProductById(int id){
+
+        db = helper.getReadableDatabase();
         userCursor = db.rawQuery("select * from Goods where " +
                 "_id =?", new String[]{String.valueOf(id)});
         userCursor.moveToFirst();
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         int nameIndex = userCursor.getColumnIndex("name");
         int descIndex = userCursor.getColumnIndex("description");
         int priceIndex = userCursor.getColumnIndex("price");
-
+        //helper.close();
         return new Product(userCursor.getInt(idIndex),
                 userCursor.getString(nameIndex),
                 userCursor.getString(descIndex),
@@ -122,21 +125,27 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     } // getProductById
 
     private void addProduct(Product prod){
+        db = helper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("name", prod.getName());
         cv.put("description", prod.getDescription());
         cv.put("price", prod.getPrice());
         db.insert("Goods", null, cv);
+        helper.close();
+
         fillProductList();
         Toast.makeText(this, "Новый товар добавлен", Toast.LENGTH_SHORT).show();
     } // addProduct
 
     private void editProduct(Product prod){
+        db = helper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("name", prod.getName());
         cv.put("description", prod.getDescription());
         cv.put("price", prod.getPrice());
         db.update("Goods", cv, "_id" + "=" + String.valueOf(prod.getId()), null);
+
+        helper.close();
         fillProductList();
         Toast.makeText(this, "Товар изменён", Toast.LENGTH_SHORT).show();
     } // addProduct
