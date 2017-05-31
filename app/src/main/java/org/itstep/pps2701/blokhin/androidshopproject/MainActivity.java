@@ -1,17 +1,13 @@
 package org.itstep.pps2701.blokhin.androidshopproject;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.*;
 import android.widget.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.itstep.pps2701.blokhin.androidshopproject.dbutils.*;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
@@ -20,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     Intent intent;
 
-    Button btnOpenProducts;
+    Button btnOpenProducts, btnExit;
 
     private static final String LOG_TAG = "SQLiteShop";
 
@@ -32,8 +28,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         dbManager = new DBManager(this);
 
         btnOpenProducts = (Button) findViewById(R.id.btnOpenProducts);
+        btnExit = (Button) findViewById(R.id.btnExit);
 
         btnOpenProducts.setOnClickListener(this);
+        btnExit.setOnClickListener(this);
     } // onCreate
 
 
@@ -44,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 intent = new Intent(this, ProductActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.btnExit:
+                android.os.Process.killProcess(android.os.Process.myPid());
         } // switch
     } // onClick
 
