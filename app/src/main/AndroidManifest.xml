@@ -17,6 +17,8 @@
         </activity>
         <activity android:name=".ProductDialog">
         </activity>
+        <activity android:name=".ProductActivity">
+        </activity>
     </application>
 
 </manifest>
