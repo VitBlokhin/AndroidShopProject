@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class ProductDialog extends AppCompatActivity implements View.OnClickListener {
 
     private Product prod;
-    private int prodId = -1;
+    private long prodId = -1;
 
     EditText edProdName;
     EditText edProdDesc;

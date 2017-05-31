@@ -3,24 +3,35 @@ package org.itstep.pps2701.blokhin.androidshopproject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Vit on 30.05.2017.
  */
 public class Order implements Parcelable {
-    private int id;
+    private long id;
     private int number;
     private Date date;
+    private List<Purchase> purchaseList;
 
-    public Order(int id, int number, Date date) {
+    public Order(long id, int number, Date date) {
         this.id = id;
         this.number = number;
         this.date = date;
+        purchaseList = new ArrayList<>();
+    }
+
+    public Order(long id, int number, long date) {
+        this.id = id;
+        this.number = number;
+        this.date = new Date(date);
+        purchaseList = new ArrayList<>();
     }
 
     protected Order(Parcel in) {
-        id = in.readInt();
+        id = in.readLong();
         number = in.readInt();
         date = new Date(in.readLong());
     }
@@ -37,11 +48,11 @@ public class Order implements Parcelable {
         }
     };
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -61,6 +72,19 @@ public class Order implements Parcelable {
         this.date = date;
     }
 
+    public List<Purchase> getPurchaseList() {
+        return purchaseList;
+    }
+
+    public void addToPurchaseList(Product prod, int quantity){
+        purchaseList.add(new Purchase(id, prod.getId(), quantity));
+    } // addToPurchaseList
+
+    public void addToPurchaseList(Purchase purchase){
+        purchaseList.add(purchase);
+    } // addToPurchaseList
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -68,7 +92,7 @@ public class Order implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeLong(id);
         dest.writeInt(number);
         dest.writeLong(date.getTime());
     } // writeToParcel

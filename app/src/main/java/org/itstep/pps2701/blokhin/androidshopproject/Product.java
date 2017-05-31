@@ -8,12 +8,12 @@ import android.os.Parcelable;
  * Created by Vit on 30.05.2017.
  */
 public class Product  implements Parcelable {
-    private int id;
+    private long id;
     private String name;
     private String description;
     private double price;
 
-    public Product(int id, String name, String description, double price) {
+    public Product(long id, String name, String description, double price) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -26,11 +26,11 @@ public class Product  implements Parcelable {
         this.price = price;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -70,7 +70,7 @@ public class Product  implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeLong(id);
         dest.writeString(name);
         dest.writeString(description);
         dest.writeDouble(price);
@@ -89,7 +89,7 @@ public class Product  implements Parcelable {
 
     // конструктор, считывающий данные из Parcel
     private Product(Parcel parcel) {
-        id = parcel.readInt();
+        id = parcel.readLong();
         name = parcel.readString();
         description = parcel.readString();
         price = parcel.readDouble();
