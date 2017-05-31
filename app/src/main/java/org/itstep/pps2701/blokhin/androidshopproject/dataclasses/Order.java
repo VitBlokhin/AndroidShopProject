@@ -34,6 +34,7 @@ public class Order implements Parcelable {
         id = in.readLong();
         number = in.readInt();
         date = new Date(in.readLong());
+        purchaseList = in.readArrayList(Purchase.class.getClassLoader());
     }
 
     public static final Creator<Order> CREATOR = new Creator<Order>() {
@@ -100,6 +101,7 @@ public class Order implements Parcelable {
         dest.writeLong(id);
         dest.writeInt(number);
         dest.writeLong(date.getTime());
+        dest.writeList(purchaseList);
     } // writeToParcel
 
     @Override
