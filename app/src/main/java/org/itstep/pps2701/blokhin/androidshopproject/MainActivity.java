@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                                     int position, long id) {
                 intent = new Intent(getApplicationContext(), ProductDialog.class);
 
-                intent.putExtra("product", getProductById((int)id+1));
-                startActivityForResult(intent, REQUEST_PRODUCT_EDIT);
+                intent.putExtra("product", getProductById((int)id+1));  // может возникнуть проблема,
+                startActivityForResult(intent, REQUEST_PRODUCT_EDIT);         // т.к. id из ListView - не то же самое, что id товара из БД
             }
         });
 

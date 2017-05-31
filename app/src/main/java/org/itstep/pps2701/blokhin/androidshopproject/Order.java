@@ -51,7 +51,6 @@ public class Order implements Parcelable {
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -59,7 +58,6 @@ public class Order implements Parcelable {
     public int getNumber() {
         return number;
     }
-
     public void setNumber(int number) {
         this.number = number;
     }
@@ -67,7 +65,6 @@ public class Order implements Parcelable {
     public Date getDate() {
         return date;
     }
-
     public void setDate(Date date) {
         this.date = date;
     }
@@ -79,10 +76,18 @@ public class Order implements Parcelable {
     public void addToPurchaseList(Product prod, int quantity){
         purchaseList.add(new Purchase(id, prod.getId(), quantity));
     } // addToPurchaseList
-
     public void addToPurchaseList(Purchase purchase){
         purchaseList.add(purchase);
     } // addToPurchaseList
+
+    public void removeFromPurchaseList(Product prod){
+        for(Purchase purchase : purchaseList) {
+            if(purchase.getProductId() == prod.getId()) purchaseList.remove(purchase);
+        }
+    } // removeFromPurchaseList
+    public void removeFromPurchaseList(Purchase purchase){
+        purchaseList.remove(purchase);
+    } // removeFromPurchaseList
 
 
     @Override
