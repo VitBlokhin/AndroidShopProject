@@ -118,7 +118,9 @@ public class DBManager {
     } // getProductById
     // Операции с таблицей заказов <//
 
+
     //> Операции с таблицей товаров в заказе
+    // TODO
     public Purchase getPurchaseById(long id){
         db = dbHelper.getReadableDatabase();
         cursor = db.rawQuery("select * from Purchases where " +
