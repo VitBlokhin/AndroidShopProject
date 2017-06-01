@@ -91,8 +91,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
             ));
         }
 
-        PurchaseBoxAdapter adapter;
-        adapter = new PurchaseBoxAdapter(this, productList, purchaseList);
+        PurchaseBoxAdapter adapter = new PurchaseBoxAdapter(this, productList, purchaseList);
         purchaseListView.setAdapter(adapter);
 
         dbManager.close();
