@@ -257,6 +257,33 @@ public class DBManager {
         return purchList;
     } // getPurchasesByOrderId
 
+    public int getPurchaseCountByOrderId(long orderId){
+        int cnt = 0;
+        db = dbHelper.getReadableDatabase();
+        cursor = db.rawQuery("select sum(quantity) from Purchases where " +
+                "order_id =?", new String[]{String.valueOf(orderId)});
+        if(cursor!=null && cursor.getCount()>0){
+            cursor.moveToFirst();
+            cnt =  cursor.getInt(0);
+            close();
+        }
+        return cnt;
+    } // getProductsCountByOrderId
+
+    public double getPurchaseTotalSumByOrderId(long orderId){
+        double sum = 0.;
+        db = dbHelper.getWritableDatabase();
+        cursor = db.rawQuery("select sum(p.quantity * g.price) from Purchases as p " +
+                        "join Goods as g on p.goods_id = g._id "+
+                        "where p.order_id =?", new String[]{String.valueOf(orderId)});
+        if(cursor!=null && cursor.getCount()>0){
+            cursor.moveToFirst();
+            sum =  cursor.getDouble(0);
+            close();
+        }
+        return sum;
+    } // getPurchaseTotalSumByOrderId
+
     public void addPurchase(Purchase purchase){
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -286,5 +313,8 @@ public class DBManager {
         close();
     } // removePurchasesByProductId
     // Операции с таблицей товаров в заказе <//
+
+
+
 
 } // class DBManager

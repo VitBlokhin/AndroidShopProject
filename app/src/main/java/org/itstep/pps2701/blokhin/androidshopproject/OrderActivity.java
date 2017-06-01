@@ -39,9 +39,9 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
 
             orderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    intent = new Intent(getApplicationContext(), ProductDialog.class);
                     Order order = (Order)orderListView.getItemAtPosition(position);
-                    intent.putExtra("order", dbManager.getOrderById(order.getId()));
+                    intent = new Intent(getApplicationContext(), OrderDialog.class);
+                    intent.putExtra("orderId", order.getId());
                     startActivityForResult(intent, REQUEST_ORDER_EDIT);
                 }
             });

@@ -8,6 +8,13 @@
         android:id="@+id/activity_order_dialog"
         tools:context="org.itstep.pps2701.blokhin.androidshopproject.OrderDialog">
 
+    <TextView
+            android:text="@string/strTxtHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtHeader"
+            android:textSize="24sp"/>
+
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -23,6 +30,25 @@
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:text="@string/strTxtProdCnt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/txtProdCnt"/>
+            <TextView
+                    android:text="@string/strTxtProdSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/txtProdSum"/>
+        </LinearLayout>
         <Button
                 android:text="@string/strBtnAddPurch"
                 android:layout_width="match_parent"
