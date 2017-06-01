@@ -73,7 +73,7 @@ public class PurchaseBoxAdapter extends BaseAdapter {
 
         CheckBox chkBuy = (CheckBox) view.findViewById(R.id.chkBox);
         // присваиваем чекбоксу обработчик
-        chkBuy.setOnCheckedChangeListener(myCheckChangeList);
+        //chkBuy.setOnCheckedChangeListener(myCheckChangeList);
         // пишем позицию
         chkBuy.setTag(position);
         // заполняем данными из товаров: в корзине или нет
@@ -91,18 +91,18 @@ public class PurchaseBoxAdapter extends BaseAdapter {
         ArrayList<Product> box = new ArrayList<Product>();
         for (Product p : products) {
             // если в корзине
-            if (p.box)
-                box.add(p);
+            //if (p.box)
+            //   box.add(p);
         }
         return box;
     }
 
     // обработчик для чекбоксов
-    OnCheckedChangeListener myCheckChangeList = new OnCheckedChangeListener() {
+    /*OnCheckedChangeListener myCheckChangeList = new OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton buttonView,
                                      boolean isChecked) {
             // меняем данные товара (в корзине или нет)
             getProduct((Integer) buttonView.getTag()).box = isChecked;
         }
-    };
+    };*/
 } // class org.itstep.pps2701.blokhin.androidshopproject.PurchaseBoxAdapter
