@@ -8,11 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Product;
+import org.itstep.pps2701.blokhin.androidshopproject.dbutils.DBManager;
 
 public class ProductDialog extends AppCompatActivity implements View.OnClickListener {
 
     private Product prod;
-    private long prodId = -1;
+    private long prodId = 0;
+
+    private DBManager dbManager;
 
     EditText edProdName;
     EditText edProdDesc;
@@ -25,24 +28,34 @@ public class ProductDialog extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_dialog);
 
-        edProdName = (EditText)findViewById(R.id.editProdName);
-        edProdDesc = (EditText)findViewById(R.id.editProdDesc);
-        edProdPrice = (EditText)findViewById(R.id.editProdPrice);
+        try {
+            dbManager = new DBManager(this);
+            dbManager.open();
 
-        Intent intent = getIntent();
-        if(intent.hasExtra("product")) {
-            prod = intent.getParcelableExtra("product");
-            prodId = prod.getId();
-            edProdName.setText(prod.getName());
-            edProdDesc.setText(prod.getDescription());
-            edProdPrice.setText(String.valueOf(prod.getPrice()));
+            edProdName = (EditText) findViewById(R.id.editProdName);
+            edProdDesc = (EditText) findViewById(R.id.editProdDesc);
+            edProdPrice = (EditText) findViewById(R.id.editProdPrice);
+
+            Intent intent = getIntent();
+            if(intent.hasExtra("productId")) {
+                //prod = intent.getParcelableExtra("product");
+                prodId = intent.getLongExtra("productId", prodId);
+                prod = dbManager.getProductById(prodId);
+                edProdName.setText(prod.getName());
+                edProdDesc.setText(prod.getDescription());
+                edProdPrice.setText(String.valueOf(prod.getPrice()));
+            }
+
+            btnOk = (Button) findViewById(R.id.btnOk);
+            btnCancel = (Button) findViewById(R.id.btnCancel);
+
+            btnOk.setOnClickListener(this);
+            btnCancel.setOnClickListener(this);
+        } catch (Exception ex) {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            setResult(RESULT_CANCELED);
+            finish();
         }
-
-        btnOk = (Button)findViewById(R.id.btnOk);
-        btnCancel = (Button)findViewById(R.id.btnCancel);
-
-        btnOk.setOnClickListener(this);
-        btnCancel.setOnClickListener(this);
     } // onCreate
 
     @Override

@@ -15,4 +15,7 @@
     <string name="strBtnBack">Назад</string>
     <string name="strBtnExit">Выход</string>
     <string name="strBtnAddOrder">Создать заказ</string>
+    <string name="strTxtProdQuant">Количество товара</string>
+    <string name="strBtnAdd">Добавить</string>
+    <string name="strBtnAddPurch">Добавить товар</string>
 </resources>

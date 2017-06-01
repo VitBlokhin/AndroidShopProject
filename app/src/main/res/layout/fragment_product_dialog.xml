@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+
+    <TextView
+            android:text="@string/strTxtProdName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textProduct"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerProduct"/>
+    <TextView
+            android:text="@string/strTxtProdQuant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textQuantity"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editQuantity" android:text="1"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <Button
+            android:text="@string/strBtnAdd"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnAdd"/>
+
+        <Button
+                android:text="@string/strBtnCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/btnCancel"/>
+    </LinearLayout>
+</LinearLayout>

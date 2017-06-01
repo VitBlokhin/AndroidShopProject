@@ -41,7 +41,7 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     intent = new Intent(getApplicationContext(), ProductDialog.class);
                     Order order = (Order)orderListView.getItemAtPosition(position);
-                    intent.putExtra("product", dbManager.getOrderById(order.getId()));
+                    intent.putExtra("order", dbManager.getOrderById(order.getId()));
                     startActivityForResult(intent, REQUEST_ORDER_EDIT);
                 }
             });
@@ -72,11 +72,11 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
             Order order;
             switch (requestCode) {
                 case REQUEST_ORDER:
-                    order = data.getParcelableExtra("product");
+                    order = data.getParcelableExtra("order");
                     dbManager.addOrder(order);
                     break;
                 case REQUEST_ORDER_EDIT:
-                    order = data.getParcelableExtra("product");
+                    order = data.getParcelableExtra("order");
                     dbManager.updateOrder(order);
                     break;
             } // switch
