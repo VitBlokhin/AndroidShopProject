@@ -72,7 +72,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
             if(orderId >= 0) fillPurchaseList();
         } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -85,14 +85,14 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
     private void fillPurchaseList() {
         List<Product> productList = new ArrayList<>();
         List<Purchase> purchaseList = new ArrayList<>();
-        for(Purchase purchase : dbManager.getPurchasesByOrderId(orderId)) {
+        /*for(Purchase purchase : dbManager.getPurchasesByOrderId(orderId)) {
             productInOrderList.add(new ProductInOrder(
                     purchase, dbManager.getProductById(purchase.getProductId())
             ));
         }
 
         PurchaseBoxAdapter adapter = new PurchaseBoxAdapter(this, productList, purchaseList);
-        purchaseListView.setAdapter(adapter);
+        purchaseListView.setAdapter(adapter);*/
 
         dbManager.close();
     } // fillPurchaseList
