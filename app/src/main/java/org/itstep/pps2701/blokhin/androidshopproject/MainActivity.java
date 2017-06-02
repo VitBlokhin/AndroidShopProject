@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     Intent intent;
 
-    Button btnOpenProducts, btnExit;
+    Button btnOpenProducts, btnOpenOrders, btnExit;
 
     private static final String LOG_TAG = "SQLiteShop";
 
@@ -28,9 +28,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         dbManager = new DBManager(this);
 
         btnOpenProducts = (Button) findViewById(R.id.btnOpenProducts);
+        btnOpenOrders = (Button)findViewById(R.id.btnOpenOrders);
         btnExit = (Button) findViewById(R.id.btnExit);
 
         btnOpenProducts.setOnClickListener(this);
+        btnOpenOrders.setOnClickListener(this);
         btnExit.setOnClickListener(this);
     } // onCreate
 
@@ -40,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         switch (v.getId()) {
             case R.id.btnOpenProducts:
                 intent = new Intent(this, ProductActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btnOpenOrders:
+                intent = new Intent(this, OrderActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btnExit:

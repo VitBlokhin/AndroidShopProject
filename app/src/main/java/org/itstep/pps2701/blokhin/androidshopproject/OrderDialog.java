@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.BoxProduct;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Order;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Product;
-import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.ProductInOrder;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Purchase;
 import org.itstep.pps2701.blokhin.androidshopproject.dbutils.DBManager;
 
@@ -61,7 +61,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
             /*purchaseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Purchase selectedPurchase = ((ProductInOrder)purchaseListView.getItemAtPosition(position)).getPurchase();
+                    Purchase selectedPurchase = ((BoxProduct)purchaseListView.getItemAtPosition(position)).getPurchase();
                     ProductDialogFragment prodDialog = new ProductDialogFragment();
                     Bundle args = new Bundle();
                     args.putParcelable("purchaseId", selectedPurchase);
@@ -70,7 +70,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
                 }
             });*/
 
-            if(orderId >= 0) fillPurchaseList();
+            fillPurchaseList();
         } catch (Exception ex) {
             //Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -80,19 +80,53 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
 
-    }
+        switch(v.getId()){
+            case R.id.btnAddPurchase:
+
+                break;
+            case R.id.btnOk:
+                try {
+                    order = new Order(orderId,
+                            order.getNumber(),
+                            order.getDate());
+                    intent.putExtra("order", order);
+                    for(BoxProduct boxProduct : ((PurchaseBoxAdapter) purchaseListView.getAdapter()).getBox()) {
+                        order.addToPurchaseList(new Purchase(orderId, boxProduct.getProduct().getId(), boxProduct.getQuantity()));
+                    }
+
+                    setResult(RESULT_OK, intent);
+                    break;
+                } catch (Exception ex){
+                    Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.btnCancel:
+                setResult(RESULT_CANCELED);
+                break;
+        } // switch
+        finish();
+    } // onClick
 
     private void fillPurchaseList() {
-        List<Product> productList = new ArrayList<>();
-        List<Purchase> purchaseList = new ArrayList<>();
-        /*for(Purchase purchase : dbManager.getPurchasesByOrderId(orderId)) {
-            productInOrderList.add(new ProductInOrder(
-                    purchase, dbManager.getProductById(purchase.getProductId())
-            ));
+        List<BoxProduct> boxProductList = new ArrayList<>();
+        List<Product> productList = new ArrayList<>(dbManager.getAllProducts());
+        if(orderId > 0) {
+            List<Purchase> purchaseList = new ArrayList<>(dbManager.getPurchasesByOrderId(orderId));
+            for(Purchase purchase : purchaseList) {
+                for(Product product : productList) {
+                    if(purchase.getProductId() == product.getId())
+                        boxProductList.add(new BoxProduct(product, true, purchase.getQuantity()));
+                    else boxProductList.add(new BoxProduct(product));
+                }
+            }
+        } else {
+            for(Product product : productList) {
+                boxProductList.add(new BoxProduct(product));
+            }
         }
 
-        PurchaseBoxAdapter adapter = new PurchaseBoxAdapter(this, productList, purchaseList);
-        purchaseListView.setAdapter(adapter);*/
+        PurchaseBoxAdapter adapter = new PurchaseBoxAdapter(this, boxProductList);
+        purchaseListView.setAdapter(adapter);
 
         dbManager.close();
     } // fillPurchaseList

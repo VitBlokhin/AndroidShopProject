@@ -1,6 +1,8 @@
 package org.itstep.pps2701.blokhin.androidshopproject;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +18,12 @@ import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.*;
 public class PurchaseBoxAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;
-    ArrayList<Product> products;
-    ArrayList<Purchase> purchases;
+    List<BoxProduct> products;
 
     // TODO !!!!
-    PurchaseBoxAdapter(Context context, ArrayList<Product> products, ArrayList<Purchase> purchases) {
+    PurchaseBoxAdapter(Context context, List<BoxProduct> products) {
         ctx = context;
         this.products = products;
-        this.purchases = purchases;
         lInflater = (LayoutInflater) ctx
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -38,13 +38,6 @@ public class PurchaseBoxAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
         return products.get(position);
-    }
-
-    public Product getProduct(int position) {
-        return products.get(position);
-    }
-    public Purchase getPurchase(int position) {
-        return purchases.get(position);
     }
 
     // id по позиции
@@ -62,18 +55,17 @@ public class PurchaseBoxAdapter extends BaseAdapter {
             view = lInflater.inflate(R.layout.item_purchaselist, parent, false);
         }
 
-        Product pr = getProduct(position);
-        Purchase pu = getPurchase(position);
+        BoxProduct pr = getProduct(position);
 
         // заполняем View в пункте списка данными из товаров: наименование, цена
         // и количество
         ((TextView) view.findViewById(R.id.txtName)).setText(pr.getName());
         ((TextView) view.findViewById(R.id.txtPrice)).setText(String.valueOf(pr.getPrice()) + " р.");
-        ((EditText) view.findViewById(R.id.editText)).setText(String.valueOf(pu.getQuantity()));
+        ((EditText) view.findViewById(R.id.editText)).setText(String.valueOf(pr.getQuantity()));
 
         CheckBox chkBuy = (CheckBox) view.findViewById(R.id.chkBox);
         // присваиваем чекбоксу обработчик
-        //chkBuy.setOnCheckedChangeListener(myCheckChangeList);
+        chkBuy.setOnCheckedChangeListener(checkChangeList);
         // пишем позицию
         chkBuy.setTag(position);
         // заполняем данными из товаров: в корзине или нет
@@ -82,27 +74,27 @@ public class PurchaseBoxAdapter extends BaseAdapter {
     }
 
     // товар по позиции
-    //ProductInOrder getProd(int position) {
-    //    return ((ProductInOrder) getItem(position));
-    //}
+    BoxProduct getProduct(int position) {
+        return ((BoxProduct) getItem(position));
+    }
 
     // содержимое корзины
-    ArrayList<Product> getBox() {
-        ArrayList<Product> box = new ArrayList<Product>();
-        for (Product p : products) {
+    ArrayList<BoxProduct> getBox() {
+        ArrayList<BoxProduct> box = new ArrayList<>();
+        for (BoxProduct p : products) {
             // если в корзине
-            //if (p.box)
-            //   box.add(p);
+            if (p.isBoxed())
+              box.add(p);
         }
         return box;
     }
 
     // обработчик для чекбоксов
-    /*OnCheckedChangeListener myCheckChangeList = new OnCheckedChangeListener() {
+    OnCheckedChangeListener checkChangeList = new OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton buttonView,
                                      boolean isChecked) {
             // меняем данные товара (в корзине или нет)
-            getProduct((Integer) buttonView.getTag()).box = isChecked;
+            getProduct((Integer) buttonView.getTag()).setBoxed(isChecked);
         }
-    };*/
-} // class org.itstep.pps2701.blokhin.androidshopproject.PurchaseBoxAdapter
+    };
+} // class PurchaseBoxAdapter

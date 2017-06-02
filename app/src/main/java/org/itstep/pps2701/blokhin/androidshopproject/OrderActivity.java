@@ -55,7 +55,7 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnAddProduct:
+            case R.id.btnAddOrder:
                 intent = new Intent(this, OrderDialog.class);
                 intent.putExtra("request", REQUEST_ORDER);
                 startActivityForResult(intent, REQUEST_ORDER);

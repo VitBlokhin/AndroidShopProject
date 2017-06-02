@@ -34,6 +34,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnOpenProducts"/>
+
+        <Button
+                android:text="@string/strBtnOpenOrders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnOpenOrders"/>
     </LinearLayout>
     <Button
             android:text="@string/strBtnExit"

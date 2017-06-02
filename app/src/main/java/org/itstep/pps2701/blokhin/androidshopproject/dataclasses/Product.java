@@ -8,10 +8,13 @@ import android.os.Parcelable;
  * Created by Vit on 30.05.2017.
  */
 public class Product  implements Parcelable {
-    private long id;
-    private String name;
-    private String description;
-    private double price;
+    protected long id;
+    protected String name;
+    protected String description;
+    protected double price;
+
+    public Product() {
+    }
 
     public Product(long id, String name, String description, double price) {
         this.id = id;

@@ -202,6 +202,7 @@ public class DBManager {
 
         removePurchasesByOrderId(order.getId());                // удаляем все товары из заказа в бд,
         for(Purchase purchase : order.getPurchaseList()) {      // добавляем новые товары из изменённого заказа
+            purchase.setOrderId(order.getId());
             addPurchase(purchase);
         }
         close();
