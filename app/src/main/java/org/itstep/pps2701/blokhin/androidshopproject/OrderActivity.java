@@ -57,7 +57,6 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
         switch (v.getId()) {
             case R.id.btnAddOrder:
                 intent = new Intent(this, OrderDialog.class);
-                intent.putExtra("request", REQUEST_ORDER);
                 startActivityForResult(intent, REQUEST_ORDER);
                 break;
             case R.id.btnBack:

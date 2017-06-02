@@ -8,12 +8,50 @@
         android:id="@+id/activity_order_dialog"
         tools:context="org.itstep.pps2701.blokhin.androidshopproject.OrderDialog">
 
-    <TextView
-            android:text="@string/strTxtHeader"
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtHeader"
-            android:textSize="24sp"/>
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+            <TextView
+                    android:text="@string/strTxtHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txtHeaderNum"
+                    android:textSize="24sp"/>
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/editOrderNum"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+            <TextView
+                    android:text="@string/strTxtHeaderDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txtHeaderDate"
+                    android:textSize="24sp"/>
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:id="@+id/editOrderDate"/>
+        </LinearLayout>
+    </LinearLayout>
+
 
     <LinearLayout
             android:orientation="vertical"
@@ -49,11 +87,6 @@
                     android:layout_weight="1"
                     android:id="@+id/txtProdSum"/>
         </LinearLayout>
-        <Button
-                android:text="@string/strBtnAddPurch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnAddPurchase"/>
 
         <LinearLayout
                 android:layout_width="match_parent"

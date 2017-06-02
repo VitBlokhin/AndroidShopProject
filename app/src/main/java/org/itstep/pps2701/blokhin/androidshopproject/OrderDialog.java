@@ -1,8 +1,10 @@
 package org.itstep.pps2701.blokhin.androidshopproject;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.*;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.BoxProduct;
@@ -11,13 +13,16 @@ import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Product;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Purchase;
 import org.itstep.pps2701.blokhin.androidshopproject.dbutils.DBManager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class OrderDialog extends AppCompatActivity implements View.OnClickListener{
 
-    private final int REQUEST_PURCHASE = 1;
-    private final int REQUEST_PURCHASE_EDIT = 2;
+    private Calendar dateAndTime = Calendar.getInstance();
+    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
     private Order order;
     private long orderId = -1;
@@ -26,8 +31,9 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
     Intent intent;
 
-    TextView txtHeader, txtProdCnt, txtProdSum;
-    Button btnAddPurchase, btnOk, btnCancel;
+    TextView txtProdCnt, txtProdSum;
+    EditText editOrderNum, editOrderDate;
+    Button btnOk, btnCancel;
     ListView purchaseListView;
 
     @Override
@@ -39,40 +45,46 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
             dbManager = new DBManager(this);
             dbManager.open();
 
-            btnAddPurchase = (Button) findViewById(R.id.btnAddPurchase);
+
+            editOrderNum = (EditText)findViewById(R.id.editOrderNum);
+            editOrderDate = (EditText)findViewById(R.id.editOrderDate);
+
+            txtProdCnt = (TextView)findViewById(R.id.txtProdCnt);
+            txtProdSum = (TextView)findViewById(R.id.txtProdSum);
+
             btnOk = (Button) findViewById(R.id.btnOk);
             btnCancel = (Button) findViewById(R.id.btnCancel);
             purchaseListView = (ListView) findViewById(R.id.listPurchase);
+
+            editOrderDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new DatePickerDialog(OrderDialog.this, dateListener,
+                            dateAndTime.get(Calendar.YEAR),
+                            dateAndTime.get(Calendar.MONTH),
+                            dateAndTime.get(Calendar.DAY_OF_MONTH))
+                            .show();
+                }
+            });
 
             intent = getIntent();
             if(intent.hasExtra("orderId")) {
                 //prod = intent.getParcelableExtra("product");
                 orderId = intent.getLongExtra("orderId", orderId);
                 order = dbManager.getOrderById(orderId);
-                txtHeader.setText("Заказ №" + order.getNumber() + " от " + order.getDate());
+                editOrderNum.setText(String.valueOf(order.getNumber()));
+                editOrderDate.setText(order.getDate().toString());
 
                 txtProdCnt.setText("Товаров: " + dbManager.getPurchaseCountByOrderId(orderId));
                 txtProdSum.setText("На сумму " + dbManager.getPurchaseTotalSumByOrderId(orderId) + " р.");
             }
 
-            btnAddPurchase.setOnClickListener(this);
             btnOk.setOnClickListener(this);
             btnCancel.setOnClickListener(this);
 
-            /*purchaseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Purchase selectedPurchase = ((BoxProduct)purchaseListView.getItemAtPosition(position)).getPurchase();
-                    ProductDialogFragment prodDialog = new ProductDialogFragment();
-                    Bundle args = new Bundle();
-                    args.putParcelable("purchaseId", selectedPurchase);
-                    prodDialog.setArguments(args);
-                    prodDialog.show(getSupportFragmentManager(), "custom");
-                }
-            });*/
-
             fillPurchaseList();
         } catch (Exception ex) {
-            //Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -81,14 +93,11 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
 
         switch(v.getId()){
-            case R.id.btnAddPurchase:
-
-                break;
             case R.id.btnOk:
                 try {
                     order = new Order(orderId,
-                            order.getNumber(),
-                            order.getDate());
+                            Integer.parseInt(editOrderNum.getText().toString()),
+                            df.parse(editOrderDate.getText().toString()));
                     intent.putExtra("order", order);
                     for(BoxProduct boxProduct : ((PurchaseBoxAdapter) purchaseListView.getAdapter()).getBox()) {
                         order.addToPurchaseList(new Purchase(orderId, boxProduct.getProduct().getId(), boxProduct.getQuantity()));
@@ -107,11 +116,27 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
         finish();
     } // onClick
 
+    DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            monthOfYear+=1;
+            dateAndTime.set(Calendar.YEAR, year);
+            dateAndTime.set(Calendar.MONTH, monthOfYear);
+            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            editOrderDate.setText(dayOfMonth + "-" + monthOfYear + "-" + year);
+        }
+    };
+
+
     private void fillPurchaseList() {
         List<BoxProduct> boxProductList = new ArrayList<>();
         List<Product> productList = new ArrayList<>(dbManager.getAllProducts());
-        if(orderId > 0) {
+        if(orderId >= 0) {
             List<Purchase> purchaseList = new ArrayList<>(dbManager.getPurchasesByOrderId(orderId));
+            if(purchaseList.isEmpty()) {
+                for(Product product : productList) {
+                    boxProductList.add(new BoxProduct(product));
+                }
+            } else
             for(Purchase purchase : purchaseList) {
                 for(Product product : productList) {
                     if(purchase.getProductId() == product.getId())

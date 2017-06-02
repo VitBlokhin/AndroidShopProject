@@ -59,8 +59,8 @@ public class PurchaseBoxAdapter extends BaseAdapter {
 
         // заполняем View в пункте списка данными из товаров: наименование, цена
         // и количество
-        ((TextView) view.findViewById(R.id.txtName)).setText(pr.getName());
-        ((TextView) view.findViewById(R.id.txtPrice)).setText(String.valueOf(pr.getPrice()) + " р.");
+        ((TextView) view.findViewById(R.id.txtName)).setText(pr.getProduct().getName());
+        ((TextView) view.findViewById(R.id.txtPrice)).setText(String.valueOf(pr.getProduct().getPrice()) + " р.");
         ((EditText) view.findViewById(R.id.editText)).setText(String.valueOf(pr.getQuantity()));
 
         CheckBox chkBuy = (CheckBox) view.findViewById(R.id.chkBox);

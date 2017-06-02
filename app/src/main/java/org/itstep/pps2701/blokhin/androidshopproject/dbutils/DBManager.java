@@ -181,7 +181,8 @@ public class DBManager {
 
         // получаем последний созданный заказ для записи его id в таблицу товаров в заказе
         cursor = db.rawQuery("select _id from Orders order by _id desc limit 1", null);
-        long id = cursor.getLong(cursor.getColumnIndex("_id"));
+        cursor.moveToFirst();
+        long id = cursor.getLong(0);
         //order.setId(id);
         close();
         for(Purchase purchase : order.getPurchaseList()) {
