@@ -45,9 +45,6 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
             dbManager = new DBManager(this);
             dbManager.open();
 
-        } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
             editOrderNum = (EditText)findViewById(R.id.editOrderNum);
             editOrderDate = (EditText)findViewById(R.id.editOrderDate);
 
@@ -86,6 +83,9 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
             fillPurchaseList();
 
+        } catch (Exception ex) {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -95,13 +95,14 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
         switch(v.getId()){
             case R.id.btnOk:
                 try {
+                    //if(intent.hasExtra("request"))
                     order = new Order(orderId,
                             Integer.parseInt(editOrderNum.getText().toString()),
                             df.parse(editOrderDate.getText().toString()));
-                    intent.putExtra("order", order);
                     for(BoxProduct boxProduct : ((PurchaseBoxAdapter) purchaseListView.getAdapter()).getBox()) {
                         order.addToPurchaseList(new Purchase(orderId, boxProduct.getProduct().getId(), boxProduct.getQuantity()));
                     }
+                    intent.putExtra("order", order);
 
                     setResult(RESULT_OK, intent);
                     break;
