@@ -4,10 +4,9 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.*;
-import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.BoxProduct;
+import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.CartProduct;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Order;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Product;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.Purchase;
@@ -16,7 +15,6 @@ import org.itstep.pps2701.blokhin.androidshopproject.dbutils.DBManager;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class OrderDialog extends AppCompatActivity implements View.OnClickListener{
@@ -98,8 +96,8 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
                     order = new Order(orderId,
                             Integer.parseInt(editOrderNum.getText().toString()),
                             df.parse(editOrderDate.getText().toString()));
-                    for(BoxProduct boxProduct : ((PurchaseBoxAdapter) purchaseListView.getAdapter()).getBox()) {
-                        order.addToPurchaseList(new Purchase(orderId, boxProduct.getProduct().getId(), boxProduct.getQuantity()));
+                    for(CartProduct cartProduct : ((PurchaseBoxAdapter) purchaseListView.getAdapter()).getCart()) {
+                        order.addToPurchaseList(new Purchase(orderId, cartProduct.getProduct().getId(), cartProduct.getQuantity()));
                     }
                     intent.putExtra("order", order);
                     setResult(RESULT_OK, intent);
@@ -133,16 +131,16 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
 
     private void fillPurchaseList() {
-        List<BoxProduct> boxProductList = new ArrayList<>();
+        List<CartProduct> cartProductList = new ArrayList<>();
         List<Product> productList = new ArrayList<>(dbManager.getAllProducts());
         for(Product product : productList) {
             Purchase purch = dbManager.getPurchaseByOrderAndProductId(orderId, product.getId());
             if(purch != null)
-                boxProductList.add(new BoxProduct(product, true, purch.getQuantity()));
-            else boxProductList.add(new BoxProduct(product));
+                cartProductList.add(new CartProduct(product, true, purch.getQuantity()));
+            else cartProductList.add(new CartProduct(product));
         }
 
-        PurchaseBoxAdapter adapter = new PurchaseBoxAdapter(this, boxProductList);
+        PurchaseBoxAdapter adapter = new PurchaseBoxAdapter(this, cartProductList);
         purchaseListView.setAdapter(adapter);
 
         dbManager.close();

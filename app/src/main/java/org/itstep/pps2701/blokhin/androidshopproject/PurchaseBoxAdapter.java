@@ -11,26 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import org.itstep.pps2701.blokhin.androidshopproject.R;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.*;
 
 /**
  * Created by Vit on 01.06.2017.
  */
 public class PurchaseBoxAdapter extends BaseAdapter {
-    Context ctx;
+    Context cont;
     LayoutInflater lInflater;
-    List<BoxProduct> products;
-    BoxProduct product;
+    List<CartProduct> products;
+    CartProduct product;
 
     //TextView txtName;
     //TextView txtPrice;
     //EditText editQuantity;
 
-    PurchaseBoxAdapter(Context context, List<BoxProduct> products) {
-        ctx = context;
+    PurchaseBoxAdapter(Context context, List<CartProduct> products) {
+        cont = context;
         this.products = products;
-        lInflater = (LayoutInflater) ctx
+        lInflater = (LayoutInflater) cont
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -73,13 +72,13 @@ public class PurchaseBoxAdapter extends BaseAdapter {
         holder.ref = position;
         product = getProduct(position);
 
-        holder.txtName.setText(product.getProduct().getName());
-        holder.txtPrice.setText(String.valueOf(product.getProduct().getPrice()) + " р.");
+        holder.txtName.setText(product.getName());
+        holder.txtPrice.setText(String.valueOf(product.getPrice()) + " р.");
         holder.editQuantity.setText(String.valueOf(product.getQuantity()));
 
         holder.chkBuy.setOnCheckedChangeListener(holder.checkChangeList);
         holder.chkBuy.setTag(position);
-        holder.chkBuy.setChecked(product.isBoxed());
+        holder.chkBuy.setChecked(product.isInCart());
 
 
         holder.editQuantity.addTextChangedListener(new TextWatcher() {
@@ -105,20 +104,20 @@ public class PurchaseBoxAdapter extends BaseAdapter {
     } // getView
 
     // товар по позиции
-    BoxProduct getProduct(int position) {
-        return ((BoxProduct) getItem(position));
+    CartProduct getProduct(int position) {
+        return ((CartProduct) getItem(position));
     } // getProduct
 
     // содержимое корзины
-    ArrayList<BoxProduct> getBox() {
-        ArrayList<BoxProduct> box = new ArrayList<>();
-        for (BoxProduct p : products) {
+    ArrayList<CartProduct> getCart() {
+        ArrayList<CartProduct> cart = new ArrayList<>();
+        for (CartProduct product : products) {
             // если в корзине
-            if (p.isBoxed())
-              box.add(p);
+            if (product.isInCart())
+              cart.add(product);
         }
-        return box;
-    } // getBox
+        return cart;
+    } // getCart
 
     private class ViewHolder{
         int ref;
@@ -132,7 +131,7 @@ public class PurchaseBoxAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
                 // меняем данные товара (в корзине или нет)
-                getProduct(ref).setBoxed(isChecked);
+                getProduct(ref).setInCart(isChecked);
             }
         };
     } // class ViewHolder
