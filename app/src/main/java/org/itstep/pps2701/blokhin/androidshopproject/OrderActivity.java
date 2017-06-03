@@ -80,6 +80,7 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
                     break;
             } // switch
         } // if
+        fillOrderList();
     } // onActivityResult
 
     private void fillOrderList() {

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.*;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +18,9 @@ public class DBManager {
     private DBHelper dbHelper;
     private Context context;
     private SQLiteDatabase db;
-
     private Cursor cursor;
+
+    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     public DBManager(Context c) {
         context = c;
@@ -175,7 +177,7 @@ public class DBManager {
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("number", order.getNumber());
-        cv.put("date", order.getDate().toString());
+        cv.put("date", df.format(order.getDate()));
         db.insert("Orders", null, cv);
         cv = new ContentValues();
 
@@ -197,7 +199,7 @@ public class DBManager {
         ContentValues cv = new ContentValues();
 
         cv.put("number", order.getNumber());
-        cv.put("date", order.getDate().toString());
+        cv.put("date", df.format(order.getDate()));
         db.update("Orders", cv, "_id" + "=" + String.valueOf(order.getId()), null);
         close();
 

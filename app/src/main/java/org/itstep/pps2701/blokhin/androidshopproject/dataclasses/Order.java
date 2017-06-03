@@ -3,6 +3,7 @@ package org.itstep.pps2701.blokhin.androidshopproject.dataclasses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,8 @@ public class Order implements Parcelable {
     private int number;
     private Date date;
     private List<Purchase> purchaseList;
+
+    private SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
     public Order(long id, int number, Date date) {
         this.id = id;
@@ -106,6 +109,6 @@ public class Order implements Parcelable {
 
     @Override
     public String toString() {
-        return "Заказ №" + number + ", от " + date;
+        return "Заказ №" + number + ", от " + df.format(date);
     }
 } // class Order

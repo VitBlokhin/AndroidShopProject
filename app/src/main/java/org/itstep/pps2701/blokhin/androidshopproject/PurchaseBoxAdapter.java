@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,11 @@ public class PurchaseBoxAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;
     List<BoxProduct> products;
+    BoxProduct pr;
+
+    TextView txtName;
+    TextView txtPrice;
+    EditText editQuantity;
 
     // TODO !!!!
     PurchaseBoxAdapter(Context context, List<BoxProduct> products) {
@@ -55,13 +62,35 @@ public class PurchaseBoxAdapter extends BaseAdapter {
             view = lInflater.inflate(R.layout.item_purchaselist, parent, false);
         }
 
-        BoxProduct pr = getProduct(position);
+        pr = getProduct(position);
+
+        txtName = (TextView) view.findViewById(R.id.txtName);
+        txtPrice = (TextView) view.findViewById(R.id.txtPrice);
+        editQuantity = (EditText) view.findViewById(R.id.editQuantity);
+        editQuantity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                pr.setQuantity(Integer.parseInt(editQuantity.getText().toString()));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                pr.setQuantity(Integer.parseInt(editQuantity.getText().toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                pr.setQuantity(Integer.parseInt(editQuantity.getText().toString()));
+            }
+        });
 
         // заполняем View в пункте списка данными из товаров: наименование, цена
         // и количество
-        ((TextView) view.findViewById(R.id.txtName)).setText(pr.getProduct().getName());
-        ((TextView) view.findViewById(R.id.txtPrice)).setText(String.valueOf(pr.getProduct().getPrice()) + " р.");
-        ((EditText) view.findViewById(R.id.editText)).setText(String.valueOf(pr.getQuantity()));
+        txtName.setText(pr.getProduct().getName());
+        txtPrice.setText(String.valueOf(pr.getProduct().getPrice()) + " р.");
+        editQuantity.setText(String.valueOf(pr.getQuantity()));
+
+        //btnSetQuantity.setTag(position);
 
         CheckBox chkBuy = (CheckBox) view.findViewById(R.id.chkBox);
         // присваиваем чекбоксу обработчик
@@ -69,7 +98,7 @@ public class PurchaseBoxAdapter extends BaseAdapter {
         // пишем позицию
         chkBuy.setTag(position);
         // заполняем данными из товаров: в корзине или нет
-        //cbBuy.setChecked(p.box);
+        chkBuy.setChecked(pr.isBoxed());
         return view;
     }
 

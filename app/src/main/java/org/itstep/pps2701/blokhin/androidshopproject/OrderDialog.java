@@ -45,7 +45,9 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
             dbManager = new DBManager(this);
             dbManager.open();
 
-
+        } catch (Exception ex) {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
             editOrderNum = (EditText)findViewById(R.id.editOrderNum);
             editOrderDate = (EditText)findViewById(R.id.editOrderDate);
 
@@ -73,7 +75,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
                 orderId = intent.getLongExtra("orderId", orderId);
                 order = dbManager.getOrderById(orderId);
                 editOrderNum.setText(String.valueOf(order.getNumber()));
-                editOrderDate.setText(order.getDate().toString());
+                editOrderDate.setText(df.format(order.getDate()));
 
                 txtProdCnt.setText("Товаров: " + dbManager.getPurchaseCountByOrderId(orderId));
                 txtProdSum.setText("На сумму " + dbManager.getPurchaseTotalSumByOrderId(orderId) + " р.");
@@ -83,9 +85,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
             btnCancel.setOnClickListener(this);
 
             fillPurchaseList();
-        } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
+
     }
 
 
