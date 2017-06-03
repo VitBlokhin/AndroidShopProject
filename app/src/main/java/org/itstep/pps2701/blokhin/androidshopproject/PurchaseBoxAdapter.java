@@ -21,13 +21,12 @@ public class PurchaseBoxAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;
     List<BoxProduct> products;
-    BoxProduct pr;
+    BoxProduct product;
 
-    TextView txtName;
-    TextView txtPrice;
-    EditText editQuantity;
+    //TextView txtName;
+    //TextView txtPrice;
+    //EditText editQuantity;
 
-    // TODO !!!!
     PurchaseBoxAdapter(Context context, List<BoxProduct> products) {
         ctx = context;
         this.products = products;
@@ -56,21 +55,36 @@ public class PurchaseBoxAdapter extends BaseAdapter {
     // пункт списка
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // используем созданные, но не используемые view
-        View view = convertView;
-        if (view == null) {
-            view = lInflater.inflate(R.layout.item_purchaselist, parent, false);
-        }
 
-        pr = getProduct(position);
+        final ViewHolder holder;
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = lInflater.inflate(R.layout.item_purchaselist, parent, false);
 
-        txtName = (TextView) view.findViewById(R.id.txtName);
-        txtPrice = (TextView) view.findViewById(R.id.txtPrice);
-        editQuantity = (EditText) view.findViewById(R.id.editQuantity);
-        editQuantity.addTextChangedListener(new TextWatcher() {
+            holder.txtName = (TextView) convertView.findViewById(R.id.txtName);
+            holder.txtPrice = (TextView) convertView.findViewById(R.id.txtPrice);
+            holder.editQuantity = (EditText) convertView.findViewById(R.id.editQuantity);
+            holder.chkBuy = (CheckBox) convertView.findViewById(R.id.chkBox);
+
+            convertView.setTag(holder);
+        } else
+            holder = (ViewHolder) convertView.getTag();
+
+        holder.ref = position;
+        product = getProduct(position);
+
+        holder.txtName.setText(product.getProduct().getName());
+        holder.txtPrice.setText(String.valueOf(product.getProduct().getPrice()) + " р.");
+        holder.editQuantity.setText(String.valueOf(product.getQuantity()));
+
+        holder.chkBuy.setOnCheckedChangeListener(holder.checkChangeList);
+        holder.chkBuy.setTag(position);
+        holder.chkBuy.setChecked(product.isBoxed());
+
+
+        holder.editQuantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -80,36 +94,20 @@ public class PurchaseBoxAdapter extends BaseAdapter {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    pr.setQuantity(Integer.parseInt(s.toString()));
+                    //holder.product.setQuantity(Integer.parseInt(s.toString()));
+                    getProduct(holder.ref).setQuantity(Integer.parseInt(s.toString()));
                 } catch (Exception ex){
-
                 }
             }
         });
-        editQuantity.setTag(position);
 
-        // заполняем View в пункте списка данными из товаров: наименование, цена
-        // и количество
-        txtName.setText(pr.getProduct().getName());
-        txtPrice.setText(String.valueOf(pr.getProduct().getPrice()) + " р.");
-        editQuantity.setText(String.valueOf(pr.getQuantity()));
-
-
-
-        CheckBox chkBuy = (CheckBox) view.findViewById(R.id.chkBox);
-        // присваиваем чекбоксу обработчик
-        chkBuy.setOnCheckedChangeListener(checkChangeList);
-        // пишем позицию
-        chkBuy.setTag(position);
-        // заполняем данными из товаров: в корзине или нет
-        chkBuy.setChecked(pr.isBoxed());
-        return view;
-    }
+        return convertView;
+    } // getView
 
     // товар по позиции
     BoxProduct getProduct(int position) {
         return ((BoxProduct) getItem(position));
-    }
+    } // getProduct
 
     // содержимое корзины
     ArrayList<BoxProduct> getBox() {
@@ -120,14 +118,22 @@ public class PurchaseBoxAdapter extends BaseAdapter {
               box.add(p);
         }
         return box;
-    }
+    } // getBox
 
-    // обработчик для чекбоксов
-    OnCheckedChangeListener checkChangeList = new OnCheckedChangeListener() {
-        public void onCheckedChanged(CompoundButton buttonView,
-                                     boolean isChecked) {
-            // меняем данные товара (в корзине или нет)
-            getProduct((Integer) buttonView.getTag()).setBoxed(isChecked);
-        }
-    };
+    private class ViewHolder{
+        int ref;
+
+        TextView txtName;
+        TextView txtPrice;
+        EditText editQuantity;
+        CheckBox chkBuy;
+
+        OnCheckedChangeListener checkChangeList = new OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                // меняем данные товара (в корзине или нет)
+                getProduct(ref).setBoxed(isChecked);
+            }
+        };
+    } // class ViewHolder
 } // class PurchaseBoxAdapter
