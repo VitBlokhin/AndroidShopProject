@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import org.itstep.pps2701.blokhin.androidshopproject.dataclasses.*;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,11 +76,12 @@ public class DBManager {
         cursor = db.rawQuery("select * from Goods", null);
         List<Product> prodList = new ArrayList<>();
         if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex("_id");
-            int nameIndex = cursor.getColumnIndex("name");
-            int descIndex = cursor.getColumnIndex("description");
-            int priceIndex = cursor.getColumnIndex("price");
             do {
+                int idIndex = cursor.getColumnIndex("_id");
+                int nameIndex = cursor.getColumnIndex("name");
+                int descIndex = cursor.getColumnIndex("description");
+                int priceIndex = cursor.getColumnIndex("price");
+
                 prodList.add(new Product(cursor.getLong(idIndex),
                         cursor.getString(nameIndex),
                         cursor.getString(descIndex),
@@ -125,7 +127,7 @@ public class DBManager {
 
         Order order = new Order(cursor.getLong(idIndex),
                 cursor.getInt(numberIndex),
-                cursor.getLong(dateIndex));
+                Date.valueOf(cursor.getString(dateIndex)));
         close();
 
         // добавляем информацию о товарах в заказе
@@ -156,13 +158,14 @@ public class DBManager {
         cursor = db.rawQuery("select * from Orders", null);
         List<Order> orderList = new ArrayList<>();
         if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex("_id");
-            int numberIndex = cursor.getColumnIndex("number");
-            int dateIndex = cursor.getColumnIndex("date");
             do {
+                int idIndex = cursor.getColumnIndex("_id");
+                int numberIndex = cursor.getColumnIndex("number");
+                int dateIndex = cursor.getColumnIndex("date");
+
                 Order order = new Order(cursor.getLong(idIndex),
                         cursor.getInt(numberIndex),
-                        cursor.getLong(dateIndex));
+                        Date.valueOf(cursor.getString(dateIndex)));
                 for(Purchase purchase : getPurchasesByOrderId(order.getId())) {
                     order.addToPurchaseList(purchase);
                 }
@@ -179,12 +182,13 @@ public class DBManager {
         cv.put("number", order.getNumber());
         cv.put("date", df.format(order.getDate()));
         db.insert("Orders", null, cv);
-        cv = new ContentValues();
+        close();
 
         // получаем последний созданный заказ для записи его id в таблицу товаров в заказе
-        cursor = db.rawQuery("select _id from Orders order by _id desc limit 1", null);
+        db = dbHelper.getReadableDatabase();
+        cursor = db.rawQuery("select * from Orders order by _id desc limit 1", null);
         cursor.moveToFirst();
-        long id = cursor.getLong(0);
+        long id = cursor.getLong(cursor.getColumnIndex("_id"));
         //order.setId(id);
         close();
         for(Purchase purchase : order.getPurchaseList()) {
@@ -238,19 +242,38 @@ public class DBManager {
                 cursor.getInt(quantityIndex));
     } // getPurchaseById
 
-    public List<Purchase> getPurchasesByOrderId(long id){
+    public Purchase getPurchaseByOrderAndProductId(long orderId, long productId){
         db = dbHelper.getReadableDatabase();
-        List<Purchase> purchList= new ArrayList<>();
         cursor = db.rawQuery("select * from Purchases where " +
-                "order_id =?", new String[]{String.valueOf(id)});
-        cursor.moveToFirst();
+                "order_id =? and goods_id =?", new String[]{String.valueOf(orderId), String.valueOf(productId)});
 
-        if (cursor.moveToFirst()) {
+        if(cursor.getCount() != 0) {
+            cursor.moveToFirst();
             int idIndex = cursor.getColumnIndex("_id");
             int orderIndex = cursor.getColumnIndex("order_id");
             int productIndex = cursor.getColumnIndex("goods_id");
             int quantityIndex = cursor.getColumnIndex("quantity");
+
+            return new Purchase(cursor.getLong(idIndex),
+                    cursor.getLong(orderIndex),
+                    cursor.getLong(productIndex),
+                    cursor.getInt(quantityIndex));
+        } else return null;
+    } // getPurchaseByOrderAndProductId
+
+    public List<Purchase> getPurchasesByOrderId(long orderId){
+        db = dbHelper.getReadableDatabase();
+        List<Purchase> purchList= new ArrayList<>();
+        cursor = db.rawQuery("select * from Purchases where " +
+                "order_id =?", new String[]{String.valueOf(orderId)});
+
+        if (cursor.moveToFirst()) {
             do {
+                int idIndex = cursor.getColumnIndex("_id");
+                int orderIndex = cursor.getColumnIndex("order_id");
+                int productIndex = cursor.getColumnIndex("goods_id");
+                int quantityIndex = cursor.getColumnIndex("quantity");
+
                 purchList.add(new Purchase(cursor.getLong(idIndex),
                         cursor.getLong(orderIndex),
                         cursor.getLong(productIndex),

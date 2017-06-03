@@ -58,6 +58,7 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
         switch (v.getId()) {
             case R.id.btnAddOrder:
                 intent = new Intent(this, OrderDialog.class);
+                intent.putExtra("request", REQUEST_ORDER);
                 startActivityForResult(intent, REQUEST_ORDER);
                 break;
             case R.id.btnBack:
@@ -69,19 +70,17 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            Order order;
+            Order order = data.getParcelableExtra("order");
             switch (requestCode) {
                 case REQUEST_ORDER:
-                    order = data.getParcelableExtra("order");
                     dbManager.addOrder(order);
                     break;
                 case REQUEST_ORDER_EDIT:
-                    order = data.getParcelableExtra("order");
                     dbManager.updateOrder(order);
                     break;
             } // switch
         } // if
-        fillOrderList();
+        //fillOrderList();
     } // onActivityResult
 
     private void fillOrderList() {

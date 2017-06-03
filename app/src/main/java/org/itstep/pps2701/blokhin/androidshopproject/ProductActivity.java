@@ -70,14 +70,12 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            Product product;
+            Product product = data.getParcelableExtra("product");
             switch (requestCode) {
                 case REQUEST_PRODUCT:
-                    product = data.getParcelableExtra("product");
                     dbManager.addProduct(product);
                     break;
                 case REQUEST_PRODUCT_EDIT:
-                    product = data.getParcelableExtra("product");
                     dbManager.updateProduct(product);
                     break;
             } // switch

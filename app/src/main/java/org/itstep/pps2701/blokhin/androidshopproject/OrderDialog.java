@@ -29,8 +29,6 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
     private DBManager dbManager;
 
-    Intent intent;
-
     TextView txtProdCnt, txtProdSum;
     EditText editOrderNum, editOrderDate;
     Button btnOk, btnCancel;
@@ -44,7 +42,6 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
         try {
             dbManager = new DBManager(this);
             dbManager.open();
-
             editOrderNum = (EditText)findViewById(R.id.editOrderNum);
             editOrderDate = (EditText)findViewById(R.id.editOrderDate);
 
@@ -66,7 +63,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
                 }
             });
 
-            intent = getIntent();
+            Intent intent = getIntent();
             if(intent.hasExtra("orderId")) {
                 //prod = intent.getParcelableExtra("product");
                 orderId = intent.getLongExtra("orderId", orderId);
@@ -91,11 +88,10 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-
+        Intent intent = new Intent();
         switch(v.getId()){
             case R.id.btnOk:
                 try {
-                    //if(intent.hasExtra("request"))
                     order = new Order(orderId,
                             Integer.parseInt(editOrderNum.getText().toString()),
                             df.parse(editOrderDate.getText().toString()));
@@ -103,7 +99,6 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
                         order.addToPurchaseList(new Purchase(orderId, boxProduct.getProduct().getId(), boxProduct.getQuantity()));
                     }
                     intent.putExtra("order", order);
-
                     setResult(RESULT_OK, intent);
                     break;
                 } catch (Exception ex){
@@ -131,24 +126,11 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
     private void fillPurchaseList() {
         List<BoxProduct> boxProductList = new ArrayList<>();
         List<Product> productList = new ArrayList<>(dbManager.getAllProducts());
-        if(orderId >= 0) {
-            List<Purchase> purchaseList = new ArrayList<>(dbManager.getPurchasesByOrderId(orderId));
-            if(purchaseList.isEmpty()) {
-                for(Product product : productList) {
-                    boxProductList.add(new BoxProduct(product));
-                }
-            } else
-            for(Purchase purchase : purchaseList) {
-                for(Product product : productList) {
-                    if(purchase.getProductId() == product.getId())
-                        boxProductList.add(new BoxProduct(product, true, purchase.getQuantity()));
-                    else boxProductList.add(new BoxProduct(product));
-                }
-            }
-        } else {
-            for(Product product : productList) {
-                boxProductList.add(new BoxProduct(product));
-            }
+        for(Product product : productList) {
+            Purchase purch = dbManager.getPurchaseByOrderAndProductId(orderId, product.getId());
+            if(purch != null)
+                boxProductList.add(new BoxProduct(product, true, purch.getQuantity()));
+            else boxProductList.add(new BoxProduct(product));
         }
 
         PurchaseBoxAdapter adapter = new PurchaseBoxAdapter(this, boxProductList);

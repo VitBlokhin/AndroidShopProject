@@ -70,19 +70,23 @@ public class PurchaseBoxAdapter extends BaseAdapter {
         editQuantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                pr.setQuantity(Integer.parseInt(editQuantity.getText().toString()));
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                pr.setQuantity(Integer.parseInt(editQuantity.getText().toString()));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                pr.setQuantity(Integer.parseInt(editQuantity.getText().toString()));
+                try {
+                    pr.setQuantity(Integer.parseInt(s.toString()));
+                } catch (Exception ex){
+
+                }
             }
         });
+        editQuantity.setTag(position);
 
         // заполняем View в пункте списка данными из товаров: наименование, цена
         // и количество
@@ -90,7 +94,7 @@ public class PurchaseBoxAdapter extends BaseAdapter {
         txtPrice.setText(String.valueOf(pr.getProduct().getPrice()) + " р.");
         editQuantity.setText(String.valueOf(pr.getQuantity()));
 
-        //btnSetQuantity.setTag(position);
+
 
         CheckBox chkBuy = (CheckBox) view.findViewById(R.id.chkBox);
         // присваиваем чекбоксу обработчик
