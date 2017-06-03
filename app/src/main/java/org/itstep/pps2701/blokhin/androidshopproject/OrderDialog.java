@@ -93,6 +93,8 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
         switch(v.getId()){
             case R.id.btnOk:
                 try {
+                    if(editOrderNum.getText().length() == 0) throw new IllegalArgumentException("Заполните все поля!");
+                    if(editOrderDate.getText().length() == 0) throw new IllegalArgumentException("Заполните все поля!");
                     order = new Order(orderId,
                             Integer.parseInt(editOrderNum.getText().toString()),
                             df.parse(editOrderDate.getText().toString()));
