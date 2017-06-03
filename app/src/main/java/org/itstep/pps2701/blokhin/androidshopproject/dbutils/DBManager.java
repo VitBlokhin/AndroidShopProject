@@ -292,7 +292,7 @@ public class DBManager {
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put("order_id", purchase.getId());
+        cv.put("order_id", purchase.getOrderId());
         cv.put("goods_id", purchase.getProductId());
         cv.put("quantity", purchase.getQuantity());
         db.insert("Purchases", null, cv);
