@@ -23,4 +23,5 @@
     <string name="strTxtHeader">Заказ</string>
     <string name="strBtnOpenOrders">Список заказов</string>
     <string name="strTxtHeaderDate">Дата заказа</string>
+    <string name="strBtnDelete">Удалить</string>
 </resources>

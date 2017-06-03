@@ -223,6 +223,7 @@ public class DBManager {
         db = dbHelper.getWritableDatabase();
         db.delete("Orders", "_id=" + order.getId(), null);
         close();
+        // удаление данных о заказе из таблицы товаров заказа
         removePurchasesByOrderId(order.getId());
     } // removeOrder
     // Операции с таблицей заказов <//
@@ -303,7 +304,7 @@ public class DBManager {
 
     public double getPurchaseTotalSumByOrderId(long orderId){
         double sum = 0.;
-        db = dbHelper.getWritableDatabase();
+        db = dbHelper.getReadableDatabase();
         cursor = db.rawQuery("select sum(p.quantity * g.price) from Purchases as p " +
                         "join Goods as g on p.goods_id = g._id "+
                         "where p.order_id =?", new String[]{String.valueOf(orderId)});
@@ -345,7 +346,112 @@ public class DBManager {
     } // removePurchasesByProductId
     // Операции с таблицей товаров в заказе <//
 
+    //> Запросы по заданию
+    public List<Order> ordersByMaxSumAndProductCount(double maxPrice, int prodCount){
 
+        db = dbHelper.getReadableDatabase();
 
+        // TODO: запрос неверный, переделать
+        cursor = db.rawQuery("select o.* from Orders as o " +
+                        "join Purchases as p on o._id = p.order_id " +
+                        "join Goods as g on p.goods_id = g._id " +
+                        "group by o._id " +
+                        "having sum(p.quantity) =? and sum(g.price * p.quantity) <?"
+                , new String[]{String.valueOf(prodCount), String.valueOf(maxPrice)});
+
+        List<Order> orderList = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("_id");
+            int numberIndex = cursor.getColumnIndex("number");
+            int dateIndex = cursor.getColumnIndex("date");
+            do {
+                Order order = new Order(cursor.getLong(idIndex),
+                        cursor.getInt(numberIndex),
+                        Date.valueOf(cursor.getString(dateIndex)));
+                orderList.add(order);
+            } while (cursor.moveToNext());
+        } // if
+        close();
+
+        return orderList;
+    }
+
+    public List<Order> ordersByProduct(Product prod){
+        db = dbHelper.getReadableDatabase();
+
+        cursor = db.rawQuery("select o.* from Orders as o " +
+                        "join Purchases as p on o._id = p.order_id " +
+                        "where p.goods_id =?"
+                , new String[]{String.valueOf(prod.getId())});
+        List<Order> orderList = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("_id");
+            int numberIndex = cursor.getColumnIndex("number");
+            int dateIndex = cursor.getColumnIndex("date");
+            do {
+                Order order = new Order(cursor.getLong(idIndex),
+                        cursor.getInt(numberIndex),
+                        Date.valueOf(cursor.getString(dateIndex)));
+                orderList.add(order);
+            } while (cursor.moveToNext());
+        } // if
+        close();
+
+        return orderList;
+    } // ordersByProduct
+
+    public List<Order> ordersByDateAndNoProduct(Date date, Product prod){
+        db = dbHelper.getReadableDatabase();
+
+        cursor = db.rawQuery("select o.* from Orders as o " +
+                        "join Purchases as p on o._id = p.order_id " +
+                        "where p.goods_id <>? and o.date = "
+                , new String[]{String.valueOf(prod.getId()), df.format(date)});
+        List<Order> orderList = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("_id");
+            int numberIndex = cursor.getColumnIndex("number");
+            int dateIndex = cursor.getColumnIndex("date");
+            do {
+                Order order = new Order(cursor.getLong(idIndex),
+                        cursor.getInt(numberIndex),
+                        Date.valueOf(cursor.getString(dateIndex)));
+                orderList.add(order);
+            } while (cursor.moveToNext());
+        } // if
+        close();
+
+        return orderList;
+    } // ordersByProduct
+
+    public void removeOrderWithProductQuantity(Product prod, int quantity) {
+        db = dbHelper.getReadableDatabase();
+        cursor = db.rawQuery("select o.* from Orders as o " +
+                "join Purchases as p on o._id = p.order_id " +
+                "where p.goods_id =? and p.quantity =?",
+                new String[]{String.valueOf(prod.getId()), String.valueOf(quantity)});
+        List<Order> orderList = new ArrayList<>();
+        if(cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("_id");
+            int numberIndex = cursor.getColumnIndex("number");
+            int dateIndex = cursor.getColumnIndex("date");
+            do {
+                Order order = new Order(cursor.getLong(idIndex),
+                        cursor.getInt(numberIndex),
+                        Date.valueOf(cursor.getString(dateIndex)));
+                orderList.add(order);
+            } while(cursor.moveToNext());
+            close();
+
+            // удаление заказа
+            for(Order order : orderList) {
+                removeOrder(order);
+            }
+        }
+    }// removeOrderWithProductQuantity
 
 } // class DBManager
+

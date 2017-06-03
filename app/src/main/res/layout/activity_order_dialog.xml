@@ -100,12 +100,20 @@
                     android:layout_weight="1"
                     android:id="@+id/btnOk"/>
             <Button
-                    android:text="@string/strBtnCancel"
+                    android:text="@string/strBtnDelete"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/btnCancel"/>
+                    android:id="@+id/btnDelete"/>
+
         </LinearLayout>
+        <Button
+                android:text="@string/strBtnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/btnCancel"/>
+
     </LinearLayout>
 
 

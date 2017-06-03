@@ -72,9 +72,11 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
             switch (requestCode) {
                 case REQUEST_ORDER:
                     dbManager.addOrder(order);
+                    Toast.makeText(this,"Заказ добавлен" ,Toast.LENGTH_LONG).show();
                     break;
                 case REQUEST_ORDER_EDIT:
                     dbManager.updateOrder(order);
+                    Toast.makeText(this,"Заказ изменён" ,Toast.LENGTH_LONG).show();
                     break;
             } // switch
         } // if
@@ -83,6 +85,8 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
 
     private void fillOrderList() {
         List<Order> orderList = dbManager.getAllOrders();
+        //List<Order> orderList = dbManager.ordersByProduct(dbManager.getProductById(1)); // проверка: поиск заказов с определённым товаром
+
 
         ArrayAdapter<Order> adapter = new ArrayAdapter<Order>(this,
                 android.R.layout.simple_list_item_1, orderList);

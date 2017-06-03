@@ -31,7 +31,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
     TextView txtProdCnt, txtProdSum;
     EditText editOrderNum, editOrderDate;
-    Button btnOk, btnCancel;
+    Button btnOk, btnCancel, btnDelete;
     ListView purchaseListView;
 
     @Override
@@ -50,6 +50,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
             btnOk = (Button) findViewById(R.id.btnOk);
             btnCancel = (Button) findViewById(R.id.btnCancel);
+            btnDelete = (Button) findViewById(R.id.btnDelete);
             purchaseListView = (ListView) findViewById(R.id.listPurchase);
 
             editOrderDate.setOnClickListener(new View.OnClickListener() {
@@ -73,9 +74,11 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
 
                 txtProdCnt.setText("Товаров: " + dbManager.getPurchaseCountByOrderId(orderId));
                 txtProdSum.setText("На сумму " + dbManager.getPurchaseTotalSumByOrderId(orderId) + " р.");
-            }
+                btnDelete.setEnabled(true);
+            } else btnDelete.setEnabled(false);
 
             btnOk.setOnClickListener(this);
+            btnDelete.setOnClickListener(this);
             btnCancel.setOnClickListener(this);
 
             fillPurchaseList();
@@ -104,6 +107,11 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
                 } catch (Exception ex){
                     Toast.makeText(this, ex.getMessage(),Toast.LENGTH_LONG).show();
                 }
+                break;
+            case R.id.btnDelete:
+                dbManager.removeOrder(order);
+                Toast.makeText(this,"Заказ удалён" ,Toast.LENGTH_LONG).show();
+                setResult(RESULT_CANCELED);
                 break;
             case R.id.btnCancel:
                 setResult(RESULT_CANCELED);

@@ -57,7 +57,6 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.btnAddProduct:
                 intent = new Intent(this, ProductDialog.class);
-                //intent.putExtra("request", REQUEST_PRODUCT);
                 startActivityForResult(intent, REQUEST_PRODUCT);
                 break;
             case R.id.btnBack:
@@ -73,9 +72,11 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             switch (requestCode) {
                 case REQUEST_PRODUCT:
                     dbManager.addProduct(product);
+                    Toast.makeText(this,"Товар добавлен" ,Toast.LENGTH_LONG).show();
                     break;
                 case REQUEST_PRODUCT_EDIT:
                     dbManager.updateProduct(product);
+                    Toast.makeText(this,"Товар добавлен" ,Toast.LENGTH_LONG).show();
                     break;
             } // switch
         } // if
