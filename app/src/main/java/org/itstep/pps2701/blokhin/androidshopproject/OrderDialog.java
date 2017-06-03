@@ -109,6 +109,7 @@ public class OrderDialog extends AppCompatActivity implements View.OnClickListen
                 setResult(RESULT_CANCELED);
                 break;
         } // switch
+
         finish();
     } // onClick
 

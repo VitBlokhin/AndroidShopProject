@@ -42,7 +42,6 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
                     Order order = (Order)orderListView.getItemAtPosition(position);
                     intent = new Intent(getApplicationContext(), OrderDialog.class);
                     intent.putExtra("orderId", order.getId());
-                    //intent.putExtra("request", REQUEST_ORDER_EDIT);
                     startActivityForResult(intent, REQUEST_ORDER_EDIT);
                 }
             });
@@ -58,7 +57,6 @@ public class OrderActivity extends AppCompatActivity  implements View.OnClickLis
         switch (v.getId()) {
             case R.id.btnAddOrder:
                 intent = new Intent(this, OrderDialog.class);
-                intent.putExtra("request", REQUEST_ORDER);
                 startActivityForResult(intent, REQUEST_ORDER);
                 break;
             case R.id.btnBack:

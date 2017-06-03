@@ -76,12 +76,12 @@ public class DBManager {
         cursor = db.rawQuery("select * from Goods", null);
         List<Product> prodList = new ArrayList<>();
         if (cursor.moveToFirst()) {
-            do {
-                int idIndex = cursor.getColumnIndex("_id");
-                int nameIndex = cursor.getColumnIndex("name");
-                int descIndex = cursor.getColumnIndex("description");
-                int priceIndex = cursor.getColumnIndex("price");
 
+            int idIndex = cursor.getColumnIndex("_id");
+            int nameIndex = cursor.getColumnIndex("name");
+            int descIndex = cursor.getColumnIndex("description");
+            int priceIndex = cursor.getColumnIndex("price");
+            do {
                 prodList.add(new Product(cursor.getLong(idIndex),
                         cursor.getString(nameIndex),
                         cursor.getString(descIndex),
@@ -148,31 +148,34 @@ public class DBManager {
 
         Order order = new Order(cursor.getLong(idIndex),
                 cursor.getInt(numberIndex),
-                cursor.getLong(dateIndex));
+                Date.valueOf(cursor.getString(dateIndex)));
         close();
         return order;
     } // getOrderByNumber
 
     public List<Order> getAllOrders(){
         db = dbHelper.getReadableDatabase();
+        //cursor = db.query("Orders", null, null, null, null, null, "_id");
         cursor = db.rawQuery("select * from Orders", null);
         List<Order> orderList = new ArrayList<>();
         if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("_id");
+            int numberIndex = cursor.getColumnIndex("number");
+            int dateIndex = cursor.getColumnIndex("date");
             do {
-                int idIndex = cursor.getColumnIndex("_id");
-                int numberIndex = cursor.getColumnIndex("number");
-                int dateIndex = cursor.getColumnIndex("date");
-
                 Order order = new Order(cursor.getLong(idIndex),
                         cursor.getInt(numberIndex),
                         Date.valueOf(cursor.getString(dateIndex)));
-                for(Purchase purchase : getPurchasesByOrderId(order.getId())) {
-                    order.addToPurchaseList(purchase);
-                }
                 orderList.add(order);
             } while (cursor.moveToNext());
         } // if
         close();
+        // заполнение заказа товарами
+        for(Order order : orderList) {
+            for(Purchase purchase : getPurchasesByOrderId(order.getId())) {
+                order.addToPurchaseList(purchase);
+        }
+        }
         return orderList;
     } // getAllOrders
 
@@ -186,8 +189,9 @@ public class DBManager {
 
         // получаем последний созданный заказ для записи его id в таблицу товаров в заказе
         db = dbHelper.getReadableDatabase();
-        cursor = db.rawQuery("select * from Orders order by _id desc limit 1", null);
-        cursor.moveToFirst();
+        cursor = db.query("Orders", null, null, null, null, null, "_id");
+        //cursor = db.rawQuery("select * from Orders order by _id desc limit 1", null);
+        cursor.moveToLast();
         long id = cursor.getLong(cursor.getColumnIndex("_id"));
         //order.setId(id);
         close();
@@ -268,12 +272,12 @@ public class DBManager {
                 "order_id =?", new String[]{String.valueOf(orderId)});
 
         if (cursor.moveToFirst()) {
-            do {
-                int idIndex = cursor.getColumnIndex("_id");
-                int orderIndex = cursor.getColumnIndex("order_id");
-                int productIndex = cursor.getColumnIndex("goods_id");
-                int quantityIndex = cursor.getColumnIndex("quantity");
 
+            int idIndex = cursor.getColumnIndex("_id");
+            int orderIndex = cursor.getColumnIndex("order_id");
+            int productIndex = cursor.getColumnIndex("goods_id");
+            int quantityIndex = cursor.getColumnIndex("quantity");
+            do {
                 purchList.add(new Purchase(cursor.getLong(idIndex),
                         cursor.getLong(orderIndex),
                         cursor.getLong(productIndex),

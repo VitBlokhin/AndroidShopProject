@@ -42,8 +42,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                     Product prod = (Product)productListView.getItemAtPosition(position);
                     intent = new Intent(getApplicationContext(), ProductDialog.class);
                     intent.putExtra("productId", prod.getId());
-                    //intent.putExtra("product", dbManager.getProductById((int) id + 1));  // может возникнуть проблема,
-                    startActivityForResult(intent, REQUEST_PRODUCT_EDIT);                      // т.к. id из ListView - не то же самое, что id товара из БД
+                    startActivityForResult(intent, REQUEST_PRODUCT_EDIT);
                 }
             });
 
@@ -58,7 +57,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.btnAddProduct:
                 intent = new Intent(this, ProductDialog.class);
-                intent.putExtra("request", REQUEST_PRODUCT);
+                //intent.putExtra("request", REQUEST_PRODUCT);
                 startActivityForResult(intent, REQUEST_PRODUCT);
                 break;
             case R.id.btnBack:
